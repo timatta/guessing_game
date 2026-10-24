@@ -1,51 +1,48 @@
 from random import randrange
 
-prt1 = True
-count = 1
-r_min = 1
-r_max = 10
-awns = randrange(r_min, r_max + 1)
+lower_bound = 1
+upper_bound= 10
 
-while prt1:
-    try:
-        r = input('Want to play with standard range 1 - 10? [y/n]: ')
+def welcome_msg():
+    print('Welcome to the guessing game.')
+    print(f'Guess a number between {lower_bound} and {upper_bound}.')
+    print()
 
-        awns = randrange(r_min, r_max + 1)
-        if r.lower() == 'n':
-            r_min = int(input('Enter a min range number: '))
-            r_max = int(input('Enter a max range number: '))
-        elif r.lower() == 'y':
-            prt1 = False
-        else:
-            print('\n----- please enter only y/n -----\n')
-            continue
+def number_guess():
+    while True:
+        try:
+            _guess = int(input('Input your guess: '))
+            if lower_bound <= _guess <= upper_bound:
+                return _guess
+            else:
+                print(f'Please enter a  valid number between {lower_bound} & {upper_bound}!')
+        except ValueError:
+            print('Please enter only a valid number!')
 
-    except ValueError:
-        print('Please enter a number!')
-        continue
+def create_rand_num():
+    _awns = randrange(lower_bound, upper_bound+1)
+    return _awns
 
-while True:
-    try:
-        # ask user to input a guess
-        print(f'Guess a number between {r_min} - {r_max}: [Try {count}]')
-        print(50 * '#')
-        print()
-        guess = int(input('Enter a Number: '))
+def play_game():
+    count = 1
+    while True:
+        print(awns)
 
+        guess = number_guess()
         if guess == awns:
-            print(50 * '#')
-            print(f'\nYou\'re right. Number {guess} is the right answer!')
-            print(f'\nIt took you {count} tries.\n')
-            print(50 * '#')
+            print(20 * '*')
+            print(f'Right in {count} tries.')
+            print(20 * '*')
             break
         else:
-            print('That\'s wrong! Try again...')
-            print()
             count += 1
-        continue
-    except ValueError:
-        print('\nPlease enter only Numbers!\n')
-        continue
+            print(20 * '~')
+            print('Wrong, try again.')
+            print(20 * '~')
 
+welcome_msg()
 
+awns = create_rand_num()
+
+play_game()
 
