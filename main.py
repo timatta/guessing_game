@@ -1,9 +1,12 @@
 from random import randrange
 
+STANDARD_RANGE: tuple[int,int]= (1, 10)
 
-def which_game_mode():
+
+def ask_game_mode() -> bool | None:
+    lower, upper = STANDARD_RANGE
     print('Welcome to the guessing game.')
-    user_input = input('Want to play standard game (1-10)? [Y/n]: ')
+    user_input = input(f'Want to play standard game ({lower}-{upper})? [Y/n]: ')
 
     if user_input.lower() == '' or user_input.lower() == 'y':
         return True
@@ -13,19 +16,16 @@ def which_game_mode():
         return None
 
 
-def give_boundaries_user():
+def ask_boundaries() -> tuple[int,int]:
     while True:
         try:
-            _boundaries = []
             lower = int(input('Input lower boundary: '))
             upper = int(input('Input upper boundary: '))
             if lower < upper:
-                _boundaries.append(lower)
-                _boundaries.append(upper)
-                return _boundaries
+                return lower, upper
             else:
                 print()
-                print(f'Upper has to be bigger than Lower!')
+                print('Upper has to be bigger than Lower!')
                 print()
                 continue
         except ValueError:
@@ -33,64 +33,64 @@ def give_boundaries_user():
             print()
 
 
-def create_rand_num(lower_bound=1, upper_bound=10):
-    _awns = randrange(lower_bound, upper_bound + 1)
-    return _awns
+def create_rand_num(lower=1, upper=10):
+    answer = randrange(lower, upper + 1)
+    return answer
 
 
-def number_guess(lower_bound=1, upper_bound=10):
+def ask_guess(lower=1, upper=10):
     while True:
         try:
-            _guess = int(input('Input your guess: '))
-            if lower_bound <= _guess <= upper_bound:
-                return _guess
+            guess = int(input('Input your guess: '))
+            if lower <= guess <= upper:
+                return guess
             else:
                 print()
-                print(f'Please enter a  valid number between {lower_bound} & {upper_bound}!')
+                print(f'Please enter a valid number between {lower} & {upper}!')
                 print()
         except ValueError:
             print('Please enter only a valid number!')
             print()
 
 
-def play_game(awns, lower, upper):
-    count = 1
-    l = lower
-    u = upper
-    print(awns)  #debug line
+def play_game(answer, lower, upper):
+    attempts = 1
     while True:
         print()
-        print(f'Try: {count}')
-        guess = number_guess(l, u)
-        if guess == awns:
+        print(f'Try: {attempts}')
+        guess = ask_guess(lower, upper)
+        if guess == answer:
             print()
             print(20 * '*')
             print(20 * '*')
-            print(f'Right in {count} tries.')
+            print(f'Right in {attempts} tries.')
             print(20 * '*')
             print(20 * '*')
             break
         else:
-            count += 1
+            attempts += 1
             print()
             print(20 * '~')
             print('Wrong, try again.')
             print(20 * '~')
 
 
-while True:
-    mode = which_game_mode()
-    if mode == True:
-        _boundaries = [1, 10]
-        play_game(create_rand_num(), _boundaries[0], _boundaries[1])
+
+
+def main():
+    while True:
+        standard = ask_game_mode()
+        if standard is None:
+            print('Please enter only y/n')
+            continue
+
+        if standard:
+           lower, upper = STANDARD_RANGE 
+        else:
+           lower, upper = ask_boundaries()
+        answer = create_rand_num(lower ,upper)
+        play_game(answer, lower, upper)
         break
 
-    elif mode == False:
-        _boundaries = give_boundaries_user()
-        play_game(create_rand_num(_boundaries[0], _boundaries[1]), _boundaries[0], _boundaries[1])
-        break
-
-    elif not mode:
-        print('Please only enter y or no!!!')
-
-    continue
+if __name__ == '__main__':
+    main()
