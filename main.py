@@ -56,7 +56,7 @@ def ask_guess(lower: int, upper: int) -> int:
             print()
 
 
-def play_game(answer, lower, upper):
+def play_game(answer: int, lower:int, upper:int) -> int:
     attempts = 1
     while True:
         print()
@@ -67,7 +67,7 @@ def play_game(answer, lower, upper):
             print_banner("*")
             print(f"Right in {attempts} tries.")
             print_banner("*")
-            break
+            return attempts
         attempts += 1
         print()
         print_banner("~")
@@ -83,7 +83,13 @@ def main() -> None:
             lower, upper = ask_boundaries()
 
         answer = create_rand_num(lower, upper)
-        play_game(answer, lower, upper)
+        attempts = play_game(answer, lower, upper)
+        
+        label = 'try' if attempts == 1 else 'tries'
+        print()
+        print_banner('*')
+        print(f'Right in {attempts} {label}.')
+        print_banner('*')
 
 
 if __name__ == "__main__":
