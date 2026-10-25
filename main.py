@@ -13,16 +13,14 @@ def print_banner(char: str) -> None:
 def ask_game_mode() -> bool | None:
     lower, upper = STANDARD_RANGE
     print("Welcome to the guessing game.")
-    raw = input(f"Want to play standard game ({lower}-{upper})? [Y/n]: ")
-    
-
-    if raw.lower() == "" or raw.lower() == "y":
-        return True
-    elif raw.lower() == "n":
-        return False
-    else:
-        return None
-
+    while True:
+        raw = input(f"Want to play standard game ({lower}-{upper})? [Y/n]: ")
+        answer = raw.strip().lower()
+        if answer in ('', 'y', 'yes'):
+            return True
+        if answer in ('n', 'no'):
+            return False
+        print('Please answer y or n.')
 
 def ask_boundaries() -> tuple[int, int]:
     while True:
@@ -77,21 +75,19 @@ def play_game(answer, lower, upper):
         print_banner("~")
 
 
-def main():
-    while True:
+def main() -> None:
         standard = ask_game_mode()
-        if standard is None:
-            print("Please enter only y/n")
-            continue
-
         if standard:
             lower, upper = STANDARD_RANGE
         else:
             lower, upper = ask_boundaries()
+
         answer = create_rand_num(lower, upper)
         play_game(answer, lower, upper)
-        break
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except (EOFError, KeyboardInterrupt):
+        print('\nBye.')
