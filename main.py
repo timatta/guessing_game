@@ -1,55 +1,60 @@
-from random import randrange
+from random import randint
 
-STANDARD_RANGE: tuple[int,int]= (1, 10)
+STANDARD_RANGE: tuple[int, int] = (1, 10)
+BANNER_WIDTH = 20
+
+
+def print_banner(char: str) -> None:
+    line = char * BANNER_WIDTH
+    print(line)
+    print(line)
 
 
 def ask_game_mode() -> bool | None:
     lower, upper = STANDARD_RANGE
-    print('Welcome to the guessing game.')
-    user_input = input(f'Want to play standard game ({lower}-{upper})? [Y/n]: ')
+    print("Welcome to the guessing game.")
+    raw = input(f"Want to play standard game ({lower}-{upper})? [Y/n]: ")
+    
 
-    if user_input.lower() == '' or user_input.lower() == 'y':
+    if raw.lower() == "" or raw.lower() == "y":
         return True
-    elif user_input.lower() == 'n':
+    elif raw.lower() == "n":
         return False
     else:
         return None
 
 
-def ask_boundaries() -> tuple[int,int]:
+def ask_boundaries() -> tuple[int, int]:
     while True:
         try:
-            lower = int(input('Input lower boundary: '))
-            upper = int(input('Input upper boundary: '))
+            lower = int(input("Input lower boundary: "))
+            upper = int(input("Input upper boundary: "))
             if lower < upper:
                 return lower, upper
-            else:
-                print()
-                print('Upper has to be bigger than Lower!')
-                print()
-                continue
+            print()
+            print("Upper has to be bigger than Lower!")
+            print()
         except ValueError:
-            print('Please enter only a valid number!')
+            print("Please enter only a valid number!")
             print()
 
 
-def create_rand_num(lower=1, upper=10):
-    answer = randrange(lower, upper + 1)
+def create_rand_num(lower: int, upper: int) -> int:
+    answer = randint(lower, upper)
     return answer
 
 
-def ask_guess(lower=1, upper=10):
+def ask_guess(lower: int, upper: int) -> int:
     while True:
         try:
-            guess = int(input('Input your guess: '))
+            guess = int(input("Input your guess: "))
             if lower <= guess <= upper:
                 return guess
-            else:
-                print()
-                print(f'Please enter a valid number between {lower} & {upper}!')
-                print()
+            print()
+            print(f"Please enter a valid number between {lower} & {upper}!")
+            print()
         except ValueError:
-            print('Please enter only a valid number!')
+            print("Please enter only a valid number!")
             print()
 
 
@@ -57,40 +62,36 @@ def play_game(answer, lower, upper):
     attempts = 1
     while True:
         print()
-        print(f'Try: {attempts}')
+        print(f"Try: {attempts}")
         guess = ask_guess(lower, upper)
         if guess == answer:
             print()
-            print(20 * '*')
-            print(20 * '*')
-            print(f'Right in {attempts} tries.')
-            print(20 * '*')
-            print(20 * '*')
+            print_banner("*")
+            print(f"Right in {attempts} tries.")
+            print_banner("*")
             break
-        else:
-            attempts += 1
-            print()
-            print(20 * '~')
-            print('Wrong, try again.')
-            print(20 * '~')
-
-
+        attempts += 1
+        print()
+        print_banner("~")
+        print("Wrong, try again.")
+        print_banner("~")
 
 
 def main():
     while True:
         standard = ask_game_mode()
         if standard is None:
-            print('Please enter only y/n')
+            print("Please enter only y/n")
             continue
 
         if standard:
-           lower, upper = STANDARD_RANGE 
+            lower, upper = STANDARD_RANGE
         else:
-           lower, upper = ask_boundaries()
-        answer = create_rand_num(lower ,upper)
+            lower, upper = ask_boundaries()
+        answer = create_rand_num(lower, upper)
         play_game(answer, lower, upper)
         break
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
